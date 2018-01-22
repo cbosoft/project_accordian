@@ -1,0 +1,61 @@
+\documentclass{report}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[left=1in, right=1in]{geometry}
+\usepackage{graphicx}
+
+\title{Project Ferret}
+\author{An Efficient Portable Keyboard}
+\date{ }
+
+\begin{document}
+\maketitle
+
+\tableofcontents
+
+\chapter{Abstract}
+The goal of this project is to come up with a new way of operating a hand-held computer (smartphone, netbook laptop, PDA, etc). At the moment, the technology is tranding towards greater reliance on touchscreen operation. This has many advantages, such as context-aware keyboard representation, efficient use of physical space. However, there are some drawbacks. Touch typing is impossible, accidental presses are a possibility, and it uses valuable screen space, all detrimental to productivity and not particularly conducive to good workflow. Physical keyboards (of the type that big fruity mobile-phone manufacturer is famous for --- not that one, the other fruity one) are a step in the right direction. Physical keys enable much faster typing, even touch typing, but still doesn't come as close to a streamlined workflow as is possible. There are only a limited number of keys, and as with most phone keyboards, only up to two fingers (thumbs) can operate the device at a time. Project Ferret is a new design to hopefully solve these issues and make smartphones a viable device for work, not just a communication device.
+
+Project Ferret should:
+\begin{itemize}
+\item be usable with one or two hands
+\item be faster to use than a standard phone keyboard
+\item have access to all $\sim$100 keys as on a standard windows-style keyboard
+\end{itemize}
+
+\chapter{Implementation}
+Keys will be split into different categories: numbers (0-9), letters (a-z), symbols (\&, ?, !, ", etc), modifiers (Ctrl, Shift, Win, Alt, Alt Gr), and misc (Up, Down, Return, Del, Esc, etc).
+
+%Each category (excluding modifiers) will be accessible by selecting the category (left index finger, four buttons). Then, groups of 8 keys in the category can be selected (left middle, ring, and pinky, two buttons each). Finally, the desired key is typed using the right hand buttons (two per finger). This corresponds to ($4 \times 3 \times 2 \times 4 \times 2 = 192$)
+Each category (excluding modifiers) will be split into groups of 8 keys, selectable using the four left hand keys. Then, the individual keys can be typed using the right hand set of keys. This gives a total set of ($2^4 \times 8 = 128$) key combinations.
+
+\section*{Notation}
+A quick note on notation. Fingers are identified by a simple code: a letter (``L'' or ``R'' for left or right) followed by a number counted up from the pinky. So left hand pinky would be L0, right hand index would be R3.
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|}
+  \hline
+  L3 & L2 & L1 & L0 & Decimal & Keys available \\ \hline
+  0  & 0  & 0  & 0  & 0  & abcd efgh \\ \hline
+  0  & 0  & 0  & 1  & 1  & ijkl mnop \\ \hline
+  0  & 0  & 1  & 0  & 2  & qrst uvwx \\ \hline
+  0  & 0  & 1  & 1  & 3  & yz \\ \hline
+  0  & 1  & 0  & 0  & 4  & $0123\ 4567$ \\ \hline
+  0  & 1  & 0  & 1  & 5  & $89+-\ */^=$ \\ \hline
+  0  & 1  & 1  & 0  & 6  & ()\%\$ $<>$!\textasciitilde \\ \hline
+  0  & 1  & 1  & 1  & 7  & ,.?" :;'\#\\ \hline
+  1  & 0  & 0  & 0  & 8  & @\&$[]$ $\{\}|\backslash$ \\ \hline
+  1  & 0  & 0  & 1  & 9  &  \\ \hline
+  1  & 0  & 1  & 0  & 10 &  \\ \hline
+  1  & 0  & 1  & 1  & 11 &  \\ \hline
+  1  & 1  & 0  & 0  & 12 &  \\ \hline
+  1  & 1  & 0  & 1  & 13 & F1 F2 F3 F4\ \ F5 F6 F7 F8 \\ \hline
+  1  & 1  & 1  & 0  & 14 & F9 F10 F11 F12 Prt Sc Numlock \\ \hline
+  1  & 1  & 1  & 1  & 15 & Home PgDn PgUp End\ \ Backspace Return Del \\ \hline
+\end{tabular}
+\end{center}
+
+Then, each thumbs has the four modifier keys available: Ctrl, Shift, Alt, and Super, as well as Esc (left) and Space (right).
+
+\end{document}
