@@ -1,7 +1,12 @@
-#include "Keyboard.h"
-
+#include <Keyboard.h>
+#define DEBUG
 // see https://www.arduino.cc/reference/en/language/functions/usb/keyboard/keyboardmodifiers/
-const int PINS[18] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, A0, A1, A2, A3, A4, A5};
+const int PINS[18] = {
+   0,  1,  2,  3,  // LEFT (1-4)
+   4,  5,  6,  7,  // RIGHT (TIPS)
+   8,  9, 10, 16,  // RIGHT (MIDS)
+  A0, A1, A2, A3, A4, A5
+  };
 const int KEYS[] = {
    97,  98,  99, 100, 101, 102, 103, 104, // ALPHA1 // ABCD EFGH
   105, 106, 107, 108, 109, 110, 111, 112, // ALPHA2 // IJKL MNOP
@@ -19,56 +24,100 @@ const int KEYS[] = {
   194, 195, 196, 197, 198, 199, 200, 201, // F1 F2 F3 F4  F5 F6 F7 F8
   202, 203, 204, 205,   0,   0,   0,   0  // F9 F10 F11 F12
   };
-const int MOD_KEYS[5] = {128, 129, 130, 131, 132}; // CTRL SHIFT ALT SUPER
+const int MOD_KEYS[4] = {128, 129, 130, 131}; // CTRL SHIFT ALT SUPER
+
+int r_key = 0;
+int typed = 0;  
+bool pressed = false;
 
 void setup() {
-  // put your setup code here, to run once:
   for (int i = 0; i < 18; i++){
-    pinMode(PINS[i], INPUT);
+    pinMode(PINS[i], INPUT_PULLUP);
   }
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-  //bool typed = false;
-  int typed = 0;
+  if (pressed){
+    if (!digitalRead(PINS[r_key + 4])){
+      delay(10); // prevents ghosting
+      return;
+    }
+    else {
+      r_key = 0;
+      typed = 0;
+      pressed = false;
+    }
+  }
   
-  for (int j = 4; j < 12; j++){
-    if (digitalRead(PINS[j])){
-      typed += j - 3;
+  for (int i = 0; i < 8; i++){
+    if (!digitalRead(PINS[4+i])){
+      r_key = i;
       
-      for (int i = 0; i < 8; i++){
-        if (digitalRead(PINS[i])){
-          typed += pow(2, i);
-        }
-      }
-
-      for (int i = 12; i < 18; i++){
-        if (digitalRead(PINS[i])){
-          typed += (i - 11) * 1000;
-        }
-      }
+      #ifdef DEBUG
+      Serial.print(" Typed [");
+      Serial.print(r_key);
+      Serial.print("]\n");
+      #endif
       
+      pressed = true;
       break;
     }
   }
 
-  if (typed){
-
-    int modif = typed / 1000;
-
-    if (modif){
-      Keyboard.press(MOD_KEYS[modif - 1]);
+  if (!pressed){
+    
+    #ifdef DEBUG
+    Serial.write(" Nothing pressed\n");
+    #endif
+    
+    delay(100);
+  }
+  else{
+    
+    #ifdef DEBUG
+    Serial.write(" Key down\n");
+    Serial.write(" \tChecking group...\n");
+    #endif
+    
+    int group = 0;
+    for (int i = 0; i < 4; i++){
+      if (!digitalRead(PINS[i])){
+        group += pow(2, i);
+      }
     }
+    
+    #ifdef DEBUG
+    Serial.write(" \tGroup: ");
+    Serial.print(group);
+    Serial.write("\n");
+    #endif
+    
+    for (int i = 12; i < 18; i++){
+      if (!digitalRead(PINS[i])){
+        Keyboard.press(MOD_KEYS[i - 12]);
+      }
+      else{
+        Keyboard.release(MOD_KEYS[i - 12]);
+      }
+    }
+    typed = (group * 8) + r_key;
 
-    Keyboard.press(KEYS[typed - 1]);
+    #ifdef DEBUG
+    Serial.print("\n\tID ");
+    Serial.print(typed);
+    Serial.print("\n\tKEY ");
+    Serial.print(char(KEYS[typed]));
+    #endif
+    
+    Keyboard.press(KEYS[typed]);
     delay(50);
-    Keyboard.releaseAll();
+    Keyboard.release(KEYS[typed]);
+
+    #ifdef DEBUG
+    Serial.write("\n");
+    #endif
   }
 }
-
-
-
 
 
 
