@@ -6,8 +6,7 @@
 \usepackage{graphicx}
 
 \title{Project Accordian}
-\author{An Efficient Portable Keyboard}
-\date{ }
+\author{v$0.1$}
 
 \begin{document}
 \maketitle
@@ -23,69 +22,44 @@ Project Accordian should:
 \item have access to all $\sim$100 keys as on a standard windows-style keyboard
 \end{itemize}
 
-\section{Notation}
-A quick note on notation. Fingers are identified by a simple code: a letter (``L'' or ``R'' for left or right) followed by a number counted up from the pinky. So left hand pinky would be L0, right hand index would be R3.
-
 \section{Implementation}
 Keys will be split into different categories: numbers (0-9), letters (a-z), symbols (\&, ?, !, ", etc), modifiers (Ctrl, Shift, Win, Alt, Alt Gr), and misc (Up, Down, Return, Del, Esc, etc).
 
 %Each category (excluding modifiers) will be accessible by selecting the category (left index finger, four buttons). Then, groups of 8 keys in the category can be selected (left middle, ring, and pinky, two buttons each). Finally, the desired key is typed using the right hand buttons (two per finger). This corresponds to ($4 \times 3 \times 2 \times 4 \times 2 = 192$)
 Each category (excluding modifiers) will be split into groups of 8 keys, selectable using the four left hand keys. Then, the individual keys can be typed using the right hand set of keys. This gives a total set of ($2^4 \times 8 = 128$) key combinations.
 
-% navig 1
-% 0000
-
-% forms 1
-% 0100
-
-% alpha 1-4
-% 1000
-% 1100
-% 1110
-% 1111
-
-% maths 1-2
-% 0110
-% 0011
-
-% symbs 1-3
-% 0010
-% 0101
-% 0111
-
-% funcs 1-2
-% 1011
-% 1101
-
-
-% 1001
-% 1010
-% 0001
-
-
 
 \subsection{Key Map Table}
+
+Fingers are referred to by a simply notation: L for left-hand, R for right-hand. 0-3 for index  to pinky. Right hand has $_M$ for mid-keys, and $_T$ for tip-keys. So right pinky, middle key, would be R3$_M$. Left Index is L0.
+
 \begin{center}
-\begin{tabular}{|c c c c|c|c|cc|}
-  \hline
-  L3 & L2 & L1 & L0 & IDs     & Name   & Keys (mid) & (tip) \\ \hline
-  0  & 0  & 0  & 0  & 0-7     & alpha1 & abcd       & efgh \\ \hline
-  0  & 0  & 0  & 1  & 8-15    & alpha2 & ijkl       & mnop \\ \hline
-  0  & 0  & 1  & 0  & 16-23   & alpha3 & qrst       & uvwx \\ \hline
-  0  & 0  & 1  & 1  & 24-31   & alpha4 & yz         &      \\ \hline
-  0  & 1  & 0  & 0  & 32-39   & maths1 & $0123$     & $4567$ \\ \hline
-  0  & 1  & 0  & 1  & 40-47   & maths2 & $89+-$     & $*/^=$ \\ \hline
-  0  & 1  & 1  & 0  & 58-55   & symbs1 &()\%\$      & $<>$!\textasciitilde \\ \hline
-  0  & 1  & 1  & 1  & 56-63   & symbs2 & ,.?"       & :;'\#\\ \hline
-  1  & 0  & 0  & 0  & 64-71   & symbs3 & @\&$[]$    & $\{\}|\backslash$ \\ \hline
-  1  & 0  & 0  & 1  & 72-79   &  ---   && \\ \hline
-  1  & 0  & 1  & 0  & 80-87   &  ---   && \\ \hline
-  1  & 0  & 1  & 1  & 88-95   & forms1 & Tab Return Bkspc Del & Space Esc \\ \hline
-  1  & 1  & 0  & 0  & 96-103  & navig1 & Left Up Down Right & Home End PgUp PgDn \\ \hline
-  1  & 1  & 0  & 1  & 104-111 & funcs1 & F1 F2 F3 F4 & F5 F6 F7 F8 \\ \hline
-  1  & 1  & 1  & 0  & 112-119 & funcs2 & F9 F10 F11 F12 & \\ \hline
-  1  & 1  & 1  & 1  & 120-127 &  ---   && \\ \hline
-\end{tabular}
+	\begin{tabular}{|cccc|c|cccc|cccc|}
+		\hline
+		\multicolumn{4}{|c|}{Group Selector} & Name & \multicolumn{4}{|c|}{Mid Keys} & \multicolumn{4}{|c|}{Tip Keys} \\ \hline
+		L0 & L1 & L2 & L3 &  & R0$_M$ & R1$_M$ & R2$_M$ & R3$_M$ & R0$_T$ & R1$_T$ & R2$_T$ & R3$_T$ \\ \hline
+		\multicolumn{13}{|c|}{00 --- Navigation group}\\ \hline
+		0 & 0 & 0 & 0 & NAVIG1 & Left & Up & Down & Right & Home & End & PgUp & PgDn \\ \hline
+		0 & 0 & 0 & 1 & NAVIG2 & Tab & Return & Bkspc & Del & Space & Esc & -- & -- \\ \hline
+		0 & 0 & 1 & 0 & FUNCS1 & F1 & F2 & F3 & F4 & F5 & F6 & F7 & F8 \\ \hline
+		0 & 0 & 1 & 1 & FUNCS2 & F9 & F10 & F11 & F12 & -- & -- & -- & -- \\ \hline
+		\multicolumn{13}{|c|}{01 --- Alphabet group}\\ \hline
+		0 & 1 & 0 & 0 & ALPHA1 & a & b & c & d & e & f & g & h \\ \hline
+		0 & 1 & 0 & 1 & ALPHA2 & i & j & k & l & m & n & o & p \\ \hline
+		0 & 1 & 1 & 0 & ALPHA3 & q & r & s & t & u & v & w & x \\ \hline
+		0 & 1 & 1 & 1 & ALPHA4 & y & z & -- & -- & -- & -- & -- & -- \\ \hline
+		\multicolumn{13}{|c|}{10 --- Maths group}\\ \hline
+		1 & 0 & 0 & 0 & MATHS1 & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\ \hline
+		1 & 0 & 0 & 1 & MATHS2 & 8 & 9 & -- & -- & -- & -- & -- & -- \\ \hline
+		1 & 0 & 1 & 0 & --     & -- & -- & -- & -- & -- & -- & -- & -- \\ \hline
+		1 & 0 & 1 & 1 & --     & -- & -- & -- & -- & -- & -- & -- & -- \\ \hline
+		\multicolumn{13}{|c|}{11 --- Symbols group}\\ \hline
+		1 & 1 & 0 & 0 & SYMBS1 & $+$ & $-$ & $*$ & $/$ & \textasciicircum & $=$ & -- & -- \\ \hline
+		1 & 1 & 0 & 1 & SYBMS2 & $($ & $)$ & \% & \$ & $<$ & $>$ & ! & \textasciitilde \\ \hline
+		1 & 1 & 1 & 0 & SYMBS3 & , & . & ? & " & : & ; & ' & \# \\ \hline
+		1 & 1 & 1 & 1 & SYMBS4 & @ & \& & $[$ & $]$ & $\{$ & $\}$ & | & \textbackslash \\ \hline
+		
+	\end{tabular}
 \end{center}
 
 Then, each thumbs has the four modifier keys available: Ctrl, Shift, Alt, and Super, as well as Esc (left) and Space (right).
