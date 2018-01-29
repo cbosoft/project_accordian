@@ -1,5 +1,5 @@
 #include <Keyboard.h>
-#define DEBUG
+//#define DEBUG
 // see https://www.arduino.cc/reference/en/language/functions/usb/keyboard/keyboardmodifiers/
 const int PINS[18] = {
    0,  1,  2,  3,  // LEFT (Index to Pinky)
@@ -27,7 +27,7 @@ const int KEYS[] = {                      // PR MI
     0,   0,   0,   0,   0,   0,   0,   0, // 10 11 // --
 
                                           // 11  -- top fingers both down: symbols group
-   43,  45,  42,  47,  94,  61,   0,   0, // 11 00 // SYMBS1 // +-*/ ^=
+   43,  45,  42,  47,  94,  61,   95,   0, // 11 00 // SYMBS1 // +-*/ ^=_
    40,  41,  37,  36,  60,  62,  33, 126, // 11 01 // SYMBS2 // ()%$ <>!~
    44,  46,  63,  34,  58,  59,  39,  35, // 11 10 // SYMBS3 //,.?" :;'#
    64,  38,  91,  93, 123, 125, 124,  92  // 11 11 // SYMBS4 // @&[] {}| (backslash)
@@ -37,6 +37,8 @@ const int MOD_KEYS[4] = {128, 129, 130, 131}; // CTRL SHIFT ALT SUPER
 int r_key = 0;
 int typed = 0;  
 bool pressed = false;
+int count = 0;
+const int holddelay = 30;
 
 void setup() {
   for (int i = 0; i < 18; i++){
@@ -48,11 +50,18 @@ void loop() {
   if (pressed){
     if (!digitalRead(PINS[r_key + 4])){
       delay(10); // prevents ghosting
-      return;
+      count += 1;
+      if (count >= holddelay){
+        count = holddelay;
+      }
+      else{
+        return;
+      }
     }
     else {
       r_key = 0;
       typed = 0;
+      count = 0;
       pressed = false;
     }
   }
