@@ -30,7 +30,6 @@ First step was to get to know the arduino system (I'd never even touched one unt
 Once I'd written some barebones code and hooked up some keyboard switch modules, I tested to see if the keyboard library available for arduino worked (and if I'd written everything okay). Success! I can type things.
 
 ## Prototype V1
-![Prototype v1](imgs/3_pro.jpg)
 ![Prototype v1 full](imgs/4_pro2.jpg)
 
 With the code written, I quickly designed a hardware shell (in Fusion 360) and printed it out (on my Anet A8). The result is the horrifyingly ugly prototype v1 above. Ugly, but functional! A little crab-like in the manner of holding it, but at least it can be used. The system is complete! Now to improve it so its not a fiddle POS.
