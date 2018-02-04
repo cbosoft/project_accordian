@@ -8,3 +8,13 @@ The solution? Project Accordian! Left four fingers select the set of keys to typ
 The name stems from the device's similarity in operation to an accordian (as pointed out by a colleague).
 
 The source for the arduino code, the electronic circuit diagram, and the 3D printable body mesh will be uploaded here.
+
+# Does it work?
+
+# Useul links
+
+Learning to type on a new keyboard is an arduous task (do you remember how slow you were when you first touched a QWERTY keyboard?). Here are a few links that could be handy.
+
+* [Typing Cat](http://thetypingcat.com/)
+
+* [Kebr](https://www.keybr.com/)
